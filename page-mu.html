@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>巫 - 무당이 되는 과정</title>
+  <style>
+    @font-face {
+      font-family: 'OKGUNG';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/OKGUNG.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'BookkMyungjo-Bd';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Bd.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'BookkMyungjo-Light';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Lt.woff2') format('woff2');
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'BookkMyungjo-Bd', serif;
+      background-color: rgb(238, 211, 172);
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #f5e6d3;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #e6d5c0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 1000;
+    }
+
+    .sidebar a {
+      text-align: center;
+      text-decoration: none;
+      font-size: 20px;
+      padding: 40px 20px;
+      color: #4a4a4a;
+      position: relative;
+      font-family: 'BookkMyungjo-Bd', serif;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+      background-color: #912919;
+      color: rgb(0, 0, 0);
+    }
+
+    .sidebar a:hover {
+      background-color: #9a3f2a;
+    }
+
+    .sidebar a.active {
+      background-color: #d58636;
+      color: #000000;
+    }
+
+    .sidebar a:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      width: 70%;
+      height: 2px;
+      background: linear-gradient(to bottom, 
+        rgba(0, 0, 0, 0.3) 1px,
+        rgba(255, 255, 255, 0.2) 1px
+      );
+    }
+
+    .content {
+      margin-left: 200px;
+      flex: 1;
+      overflow-x: hidden;
+      background-color: rgb(238, 211, 172);
+      position: relative;
+      padding: 30px 0;
+    }
+
+    .content-title {
+      font-size: 190px;
+      font-family: 'OKGUNG', sans-serif;
+      font-weight: bold;
+      color: #000;
+      margin: 5px 40px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .description {
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      color: #000;
+      margin-left: 80px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+      line-height: 2;
+    }
+
+    .long-description {
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      line-height: 2;
+      color: #000;
+      margin: 80px 40px;
+      margin-top: 300px;
+      margin-bottom: 300px;
+      text-align: center;
+      white-space: pre-line;
+      position: relative;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .animate {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    .content-section {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin: 180px 40px 120px 40px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .content-section:first-of-type {
+      margin-top: 210px;
+    }
+
+    .section-title {
+      font-family: 'OKGUNG', sans-serif;
+      font-size: 64px;
+      font-weight: bold;
+      color: #000;
+      margin: 0 0 20px 0;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .section-image {
+      flex: 1;
+      max-width: 50%;
+      margin-left: 60px;
+      opacity: 0;
+      transform: translateX(-100px);
+      transition: all 1.2s ease-out;
+    }
+
+    .section-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 4px solid #6b1f14;
+    }
+
+    .section-image.animate {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .section-text-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 60px;
+    }
+
+    .section-text {
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      color: #000;
+      text-align: left;
+      line-height: 2;
+    }
+
+    .content-section-reverse {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin: 180px 40px 120px 40px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .content-section-reverse .section-text-container {
+      margin-left: 60px;
+    }
+
+    .section-image-reverse {
+      flex: 1;
+      max-width: 50%;
+      margin-right: 60px;
+      opacity: 0;
+      transform: translateX(100px);
+      transition: all 1.2s ease-out;
+    }
+
+    .section-image-reverse img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 4px solid #6b1f14;
+    }
+
+    .section-image-reverse.animate {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 180px;
+      }
+
+      .sidebar a {
+        font-size: 24px;
+        padding: 30px 15px;
+      }
+
+      .content {
+        margin-left: 180px;
+      }
+
+      .content-section {
+        flex-direction: column;
+        gap: 30px;
+        margin: 100px 20px 80px 20px;
+      }
+
+      .content-section:first-of-type {
+        margin-top: 120px;
+      }
+
+      .content-section-reverse {
+        flex-direction: column;
+        gap: 30px;
+        margin: 100px 20px 80px 20px;
+      }
+
+      .content-section-reverse .section-text-container {
+        margin-left: 30px;
+      }
+
+      .section-image {
+        max-width: 100%;
+        margin-left: 30px;
+        transform: translateY(-50px);
+      }
+
+      .section-image-reverse {
+        max-width: 100%;
+        margin-right: 30px;
+        transform: translateY(-50px);
+      }
+
+      .section-image.animate {
+        transform: translateY(0);
+      }
+
+      .section-image-reverse.animate {
+        transform: translateY(0);
+      }
+
+      .section-text {
+        font-size: 20px;
+      }
+
+      .section-title {
+        font-size: 48px;
+        margin: 0 0 15px 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #d38a8a;
+        position: static;
+      }
+
+      .sidebar a {
+        flex: 1;
+        font-size: 16px;
+        padding: 10px;
+        white-space: nowrap;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+
+      .content-section {
+        margin: 80px 15px 60px 15px;
+        gap: 20px;
+      }
+
+      .content-section:first-of-type {
+        margin-top: 100px;
+      }
+
+      .content-section-reverse {
+        margin: 80px 15px 60px 15px;
+        gap: 20px;
+      }
+
+      .content-section-reverse .section-text-container {
+        margin-left: 15px;
+      }
+
+      .section-image {
+        margin-left: 15px;
+      }
+
+      .section-image-reverse {
+        margin-right: 15px;
+      }
+
+      .section-text {
+        font-size: 18px;
+      }
+
+      .section-title {
+        font-size: 36px;
+        margin: 0 0 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <a href="page-mu.html" class="active">무당이 되는 길</a>
+      <a href="mudang.html">무당의 종류</a>
+      <a href="mugu.html">무구</a>
+    </div>
+
+    <div class="content">
+      <div class="content-title">무당이 되는 길</div>
+      <div class="description">대한민국에서 무당이 되는 길은 보통 두 가지로 나뉜다.<br>하나는 대대로 무속을 이어받는 세습무이고, 다른 하나는 신병을 겪고 신내림을 통해 무당이 되는 강신무다.<br><br><br></div>
+      
+      <div class="content-section">
+        <div class="section-image">
+          <img src="ss.jpg" alt="세습무">
+        </div>
+        <div class="section-text-container">
+          <div class="section-title">세습무</div>
+          <div class="section-text">
+            세습무는 부모가 무당이면 자식도 자연스레 그 길을 따르며,<br>주로 마을 공동체의 신앙을 유지하는 역할도 했다.
+          </div>
+        </div>
+      </div>
+      
+      <div class="content-section-reverse">
+        <div class="section-text-container">
+          <div class="section-title">강신무</div>
+          <div class="section-text">
+            반면 강신무는 원하지 않아도 이상한 병이나 기이한 현상을<br>겪으며 무당이 될 팔자에 따라 신을 모시게 된다.
+          </div>
+        </div>
+        <div class="section-image-reverse">
+          <img src="gs.jpg" alt="강신무">
+        </div>
+      </div>
+
+      <div style="margin: 180px 0 60px 0;">
+        <div class="description" style="text-align: center; margin: 0 40px 15px 40px; font-family: 'BookkMyungjo-Light', serif; font-size: 24px; color: #000; line-height: 2;">
+          <br><br><br><br><br>그렇게 신내림을 받은 강신무는 '신어머니'나 '신아버지'라 불리는 선배 무당에게서 굿과 무속 의례를 배운다.<br>처음에는 '애동'이라 불리며 견습 무당으로 활동하고, 점차 의식을 주관하는 무당으로 성장한다.<br><br><br><br><br><br><br><br><br><br>
+        </div>
+        <a href="http://youtu.be/ku3sUxe3X2w?si=U80G0niT27qB2" target="_blank" style="display: block; text-decoration: none;">
+          <img src="md.jpg" alt="강신무의 성장 과정" style="width: 100%; height: auto; display: block;">
+        </a>
+        <div style="text-align: center; margin-top: 15px; font-family: 'BookkMyungjo-Light', serif; font-size: 24px; color: #000;"><br><br>이미지 클릭 - 영상 이동</div>
+      </div>
+      
+
+      <div class="description" style="margin: 60px 40px 120px 40px; text-align: center; color: #000; line-height: 2;">
+        <br><br><br><br><br><br><br><br>그러나 실제로는 신을 모실 팔자가 아닌데도,<br>불안한 마음을 이용해 고액의 굿비를 요구하는 사기성 내림굿도 많아 주의가 필요하다.<br><br><br><br><br><br><br>
+      </div>
+      
+      <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <a href="index.html" style="display: inline-block; text-decoration: none;">
+          <img src="bell.png" alt="메인으로" style="width: 90px; height: auto;">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+          
+         
+          if (entry.target.classList.contains('content-section')) {
+            const sectionImage = entry.target.querySelector('.section-image');
+            if (sectionImage) {
+              sectionImage.classList.add('animate');
+            }
+          }
+
+          
+          if (entry.target.classList.contains('content-section-reverse')) {
+            const sectionImageReverse = entry.target.querySelector('.section-image-reverse');
+            if (sectionImageReverse) {
+              sectionImageReverse.classList.add('animate');
+            }
+          }
+        } else {
+          entry.target.classList.remove('animate');
+          
+
+          if (entry.target.classList.contains('content-section')) {
+            const sectionImage = entry.target.querySelector('.section-image');
+            if (sectionImage) {
+              sectionImage.classList.remove('animate');
+            }
+          }
+          
+
+          if (entry.target.classList.contains('content-section-reverse')) {
+            const sectionImageReverse = entry.target.querySelector('.section-image-reverse');
+            if (sectionImageReverse) {
+              sectionImageReverse.classList.remove('animate');
+            }
+          }
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      window.scrollTo(0, 0);
+      
+      const elements = document.querySelectorAll('.content-title, .description, .section-title, .content-section, .content-section-reverse, .long-description');
+      elements.forEach(element => {
+        observer.observe(element);
+      });
+    });
+  </script>
+</body>
+</html>

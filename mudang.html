@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>巫 - 무당의 종류</title>
+  <style>
+    @font-face {
+      font-family: 'OKGUNG';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/OKGUNG.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'BookkMyungjo-Bd';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Bd.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'BookkMyungjo-Light';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Lt.woff2') format('woff2');
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'BookkMyungjo-Bd', serif;
+      background-color: rgb(238, 211, 172);
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #f5e6d3;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #e6d5c0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 1000;
+    }
+
+    .sidebar a {
+      text-align: center;
+      text-decoration: none;
+      font-size: 20px;
+      padding: 40px 20px;
+      color: #4a4a4a;
+      position: relative;
+      font-family: 'BookkMyungjo-Bd', serif;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+      background-color: #912919;
+      color: rgb(0, 0, 0);
+    }
+
+    .sidebar a:hover {
+      background-color: #9a3f2a;
+    }
+
+    .sidebar a.active {
+      background-color: #d58636;
+      color: #000000;
+    }
+
+    .sidebar a:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      width: 70%;
+      height: 2px;
+      background: linear-gradient(to bottom, 
+        rgba(0, 0, 0, 0.3) 1px,
+        rgba(255, 255, 255, 0.2) 1px
+      );
+    }
+
+    .content {
+      margin-left: 200px;
+      flex: 1;
+      overflow-x: hidden;
+      background-color: rgb(238, 211, 172);
+      position: relative;
+      padding: 30px 0;
+    }
+
+    .content-title {
+      font-size: clamp(40px, 12vw, 220px);
+      font-family: 'OKGUNG', sans-serif;
+      font-weight: bold;
+      color: #000;
+      margin: 5px 40px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .description {
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      color: #000;
+      margin-left: 80px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .content-image {
+      width: 85%;
+      max-width: 1100px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .image-container {
+      position: relative;
+      width: 85%;
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+
+    .number-overlay {
+      position: absolute;
+      font-family: 'BookkMyungjo-Bd', serif;
+      font-size: 32px;
+      line-height: 1;
+      color: white;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+      letter-spacing: 0.1em;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .number-label {
+      position: absolute;
+      font-family: 'BookkMyungjo-Bd', serif;
+      font-size: 24px;
+      color: black;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+      white-space: nowrap;
+    }
+
+    /* Right side numbers */
+    .number-1 { top: 0; right: 40px; }
+    .number-2 { top: 240px; right: 40px; }
+    .number-3 { top: 480px; right: 40px; }
+
+    /* Left side numbers */
+    .number-4 { bottom: 480px; left: 40px; }
+    .number-5 { bottom: 240px; left: 40px; }
+    .number-6 { bottom: 0; left: 40px; }
+
+    /* Labels */
+    .label-role {
+      top: 18px;
+      right: 120px;
+    }
+
+    .label-region {
+      bottom: 498px;
+      left: 120px;
+    }
+
+    .number-overlay::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: black;
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .number-overlay:hover {
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
+    }
+
+    .tooltip {
+      position: absolute;
+      width: 400px;
+      background-color: rgba(87, 65, 30, 0.95);
+      padding: 20px;
+      border-radius: 15px;
+      color: #eee;
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 16px;
+      line-height: 1.6;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 100;
+    }
+
+    .tooltip-title {
+      font-family: 'BookkMyungjo-Bd', serif;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    /* Left side tooltips */
+    .number-1:hover ~ .tooltip-1,
+    .number-2:hover ~ .tooltip-2,
+    .number-3:hover ~ .tooltip-3 {
+      opacity: 1;
+      visibility: visible;
+      right: 120px;
+    }
+
+    /* Right side tooltips */
+    .number-4:hover ~ .tooltip-4,
+    .number-5:hover ~ .tooltip-5,
+    .number-6:hover ~ .tooltip-6 {
+      opacity: 1;
+      visibility: visible;
+      left: 120px;
+    }
+
+    .tooltip-1 { top: -20px; }
+    .tooltip-2 { top: 220px; }
+    .tooltip-3 { top: 460px; }
+    .tooltip-4 { bottom: 460px; }
+    .tooltip-5 { bottom: 220px; }
+    .tooltip-6 { bottom: -20px; }
+
+    .animate {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 180px;
+      }
+
+      .sidebar a {
+        font-size: 24px;
+        padding: 30px 15px;
+      }
+
+      .content {
+        margin-left: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #d38a8a;
+        position: static;
+      }
+
+      .sidebar a {
+        flex: 1;
+        font-size: 16px;
+        padding: 10px;
+        white-space: nowrap;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <a href="page-mu.html">무당이 되는 길</a>
+      <a href="mudang.html" class="active">무당의 종류</a>
+      <a href="mugu.html">무구</a>
+    </div>
+
+    <div class="content">
+      <div class="overlay">
+        <div class="content-title">무당의 종류</div>
+        <div class="description">한국 무속에서 무당은 지역과 전승 방식에 따라 다양한 유형으로 분류된다.</div>
+        <div class="image-container">
+          <div class="number-overlay number-1">1</div>
+          <div class="number-overlay number-2">2</div>
+          <div class="number-overlay number-3">3</div>
+          <div class="number-overlay number-4">4</div>
+          <div class="number-overlay number-5">5</div>
+          <div class="number-overlay number-6">6</div>
+          <div class="number-label label-role">역할별</div>
+          <div class="number-label label-region">지역별</div>
+          <div class="tooltip tooltip-1">
+            <div class="tooltip-title">무당 / 법사 / 점쟁이</div>
+            무당은 굿을 보며, 법사는 독경이나 주문을 읊어서 굿의 효험을 높이거나 귀신을 쫓고 경전을 배운다. 점쟁이는 굿은 하지 않고 길흉화복을 점친다. 본디 무당은 굿을 하는 사람만을 일컫지만, 요새는 법사와 점쟁이까지 무당으로 부른다.
+          </div>
+          <div class="tooltip tooltip-2">
+            <div class="tooltip-title">박수 / 무녀</div>
+            남성 무속인은 박수(무격), 여성 무속인은 무녀로 칭한다. 여성 무속인에는 더욱 다양한 종류가 존재하지만 이를 모두 통틀어 무녀로 부르고 있다.
+          </div>
+          <div class="tooltip tooltip-3">
+            <div class="tooltip-title">약사 / 잽이</div>
+            굿이나 무속 행사에서 악기를 연주하는 사람들이다. 지역에 따라 다르지만 보통은 전문적으로 무속에 관련된 악기를 연주하며, 무당들과 비슷한 전문가 취급을 받는다.
+          </div>
+          <div class="tooltip tooltip-4">
+            <div class="tooltip-title">만신</div>
+            이북에서 영험하고 고명한 무당을 뜻하는 뜻이며, 무당이 섬기는 신을 만신이라고 부르기도 한다.
+          </div>
+          <div class="tooltip tooltip-5">
+            <div class="tooltip-title">단골레</div>
+            전라도 지역에서 무당을 부르는 호칭 중 하나. 한 지역에서 오래 무당일을 하는 세습무와 그 신도들을 의미하는 단어이다.
+          </div>
+          <div class="tooltip tooltip-6">
+            <div class="tooltip-title">심방</div>
+            제주도의 무당 구분 중 하나로서 신의 아이라는 뜻이다. 남녀에 따라 각각 소나이심방, 예폔신방, 능력에 따라 수심방(주도), 작은심방(평범), 큰심방(출중), 당맨신방(매우 출중)
+          </div>
+          <img src="mdmd.png" alt="무당의 종류" class="content-image">
+
+        </div>
+      </div>
+
+      <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <a href="index.html" style="display: inline-block; text-decoration: none;">
+          <img src="bell.png" alt="메인으로" style="width: 90px; height: auto;">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        } else {
+          entry.target.classList.remove('animate');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      window.scrollTo(0, 0);
+      
+      const elements = document.querySelectorAll('.content-title, .description, .content-image, .number-overlay, .number-label');
+      elements.forEach(element => {
+        observer.observe(element);
+      });
+    });
+  </script>
+</body>
+</html>

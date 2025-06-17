@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>巫 - 무구</title>
+  <style>
+    @font-face {
+      font-family: 'OKGUNG';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/OKGUNG.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'BookkMyungjo-Bd';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Bd.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'BookkMyungjo-Light';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Lt.woff2') format('woff2');
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'BookkMyungjo-Bd', serif;
+      background-color: rgb(238, 211, 172);
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #f5e6d3;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #e6d5c0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 1000;
+    }
+
+    .sidebar a {
+      text-align: center;
+      text-decoration: none;
+      font-size: 20px;
+      padding: 40px 20px;
+      color: #4a4a4a;
+      position: relative;
+      font-family: 'BookkMyungjo-Bd', serif;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+      background-color: #912919;
+      color: rgb(0, 0, 0);
+    }
+
+    .sidebar a:hover {
+      background-color: #9a3f2a;
+    }
+
+    .sidebar a.active {
+      background-color: #d58636;
+      color: #000000;
+    }
+
+    .sidebar a:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      width: 70%;
+      height: 2px;
+      background: linear-gradient(to bottom, 
+        rgba(0, 0, 0, 0.3) 1px,
+        rgba(255, 255, 255, 0.2) 1px
+      );
+    }
+
+    .content {
+      margin-left: 200px;
+      flex: 1;
+      overflow-x: hidden;
+      background-color: rgb(238, 211, 172);
+      position: relative;
+    }
+
+    .overlay {
+      position: relative;
+      z-index: 1;
+      padding: 30px 0;
+    }
+
+    .content-title {
+      font-size: clamp(40px, 12vw, 220px);
+      font-family: 'OKGUNG', sans-serif;
+      font-weight: bold;
+      color: #000;
+      margin: 5px 40px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .description {
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      color: #000;
+      margin-left: 80px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .long-description {
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      line-height: 2;
+      color: #000;
+      margin: 80px 40px;
+      margin-top: 300px;
+      margin-bottom: 300px;
+      text-align: center;
+      white-space: pre-line;
+      position: relative;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .content-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 100px 0 0 0;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .image-container {
+      position: relative;
+      width: 100%;
+      margin: 100px 0 0 0;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .animate {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    .overlay-image {
+      position: absolute;
+      transition: all 0.3s ease;
+      z-index: 2;
+      opacity: 1;
+      cursor: pointer;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+      width: 27.5%;
+      height: auto;
+      max-width: 330px;
+    }
+
+    .overlay-image:hover {
+      transform: scale(1.15) !important;
+      filter: drop-shadow(0 0 15px rgba(0,0,0,0.4));
+      z-index: 100 !important;
+    }
+
+    #knife {
+      top: 20%;
+      left: 19%;
+      transform: translateX(-50%) scale(1.43);
+      width: 400px;
+    }
+
+    #knife:hover {
+      transform: translateX(-50%) scale(1.55) !important;
+    }
+
+    #sinwi {
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%) scale(1.1);
+      width: 180px;
+    }
+
+    #sinwi:hover {
+      transform: translateX(-50%) scale(1.25) !important;
+    }
+
+    #bowl {
+      top: 20%;
+      left: 83.33%;
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    #bowl:hover {
+      transform: translateX(-50%) scale(1.25) !important;
+    }
+
+    #zing {
+      bottom: 10%;
+      left: 16.67%;
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    #zing:hover {
+      transform: translateX(-50%) scale(1.25) !important;
+    }
+
+    #mu-bell {
+      bottom: 0%;
+      left: 50%;
+      transform: translateX(-50%) scale(1.1);
+      width: 13.75%;
+    }
+
+    #mu-bell:hover {
+      transform: translateX(-50%) scale(1.25) !important;
+    }
+
+    #buk {
+      bottom: 10%;
+      left: 83.33%;
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    #buk:hover {
+      transform: translateX(-50%) scale(1.25) !important;
+    }
+
+    .click-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      color: #9f2424;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .content-video {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 100px 0;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+    }
+
+    .detail-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-content {
+      width: 90%;
+      max-width: 1200px;
+      height: 80%;
+      background-color: rgb(238, 211, 172);
+      border-radius: 20px;
+      display: flex;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .detail-image {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      border-right: 3px solid #922b19;
+    }
+
+    .detail-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .detail-text {
+      flex: 1;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .detail-title {
+      font-family: 'OKGUNG', sans-serif;
+      font-size: 96px;
+      color: #000;
+      margin-bottom: 40px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .detail-description {
+      font-family: 'BookkMyungjo-Light', serif;
+      font-size: 24px;
+      line-height: 1.8;
+      color: #000;
+      text-align: justify;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 0;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .close-button:hover {
+      color: #922b19;
+    }
+
+    /* 게임 스타일 */
+    .game-container {
+      background-color: #922b19;
+      margin: 300px 40px 200px 40px;
+      padding: 60px 40px;
+      display: flex;
+      gap: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 1.2s ease-out;
+      min-height: 500px;
+      position: relative;
+      border: 4px solid #f2d38a;
+    }
+
+    .game-container::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
+      border: 2px solid #dbaf62;
+      pointer-events: none;
+    }
+
+    .game-left {
+      flex: 1;
+      background-color: rgba(238, 211, 172, 0.9);
+      padding: 40px;
+      transition: filter 0.3s ease;
+    }
+
+    .game-left.dimmed {
+      filter: brightness(0.4);
+    }
+
+    .game-images {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      padding: 20px;
+    }
+
+    .game-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 20px;
+    }
+
+    .game-image.dimmed {
+      filter: brightness(0.3);
+    }
+
+    .feedback-overlay {
+      position: absolute;
+      top: 50%;
+      left: 25%;
+      transform: translate(-50%, -50%);
+      font-size: 120px;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 30;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    .feedback-correct {
+      color: #00ff41;
+    }
+
+    .feedback-incorrect {
+      color: #ff1744;
+    }
+
+    .game-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      padding: 20px;
+    }
+
+    .game-title {
+      font-family: 'OKGUNG', sans-serif;
+      font-size: 64px;
+      color: rgb(238, 211, 172);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .game-input-container {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .game-input {
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 18px;
+      font-family: 'BookkMyungjo-Light', serif;
+      border: none;
+      background-color: rgb(238, 211, 172);
+      color: #000;
+      text-align: center;
+      outline: none;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .game-input::placeholder {
+      color: #666;
+    }
+
+    .game-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .game-button {
+      padding: 12px 24px;
+      font-size: 18px;
+      font-family: 'BookkMyungjo-Bd', serif;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .refresh-btn {
+      background-color: #737969;
+      color: white;
+    }
+
+    .refresh-btn:hover {
+      background-color: #5b584f;
+      transform: translateY(-2px);
+    }
+
+    .score-btn {
+      background-color: #f39c12;
+      color: white;
+    }
+
+    .score-btn:hover {
+      background-color: #d68910;
+      transform: translateY(-2px);
+    }
+
+    .game-result {
+      font-family: 'BookkMyungjo-Bd', serif;
+      font-size: 20px;
+      color: rgb(238, 211, 172);
+      text-align: center;
+      min-height: 30px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 180px;
+      }
+
+      .sidebar a {
+        font-size: 24px;
+        padding: 30px 15px;
+      }
+
+      .content {
+        margin-left: 180px;
+      }
+
+      .overlay-image {
+        width: 30.8%;
+        max-width: 220px;
+      }
+
+      .game-container {
+        flex-direction: column;
+        margin: 120px 20px;
+        padding: 40px 20px;
+        gap: 30px;
+        min-height: 450px;
+      }
+
+      .game-images {
+        height: 300px;
+      }
+
+      .game-title {
+        font-size: 48px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        flex-direction: row;
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #d38a8a;
+        position: static;
+      }
+
+      .sidebar a {
+        flex: 1;
+        font-size: 16px;
+        padding: 10px;
+        white-space: nowrap;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+
+      .overlay-image {
+        width: 33%;
+        max-width: 165px;
+      }
+
+      .game-container {
+        margin: 80px 10px;
+        padding: 30px 15px;
+        gap: 25px;
+        min-height: 400px;
+      }
+
+      .game-images {
+        height: 250px;
+      }
+
+      .game-title {
+        font-size: 36px;
+      }
+
+      .game-input {
+        font-size: 16px;
+        padding: 12px 15px;
+      }
+
+      .game-button {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <a href="page-mu.html">무당이 되는 길</a>
+      <a href="mudang.html">무당의 종류</a>
+      <a href="mugu.html" class="active">무구</a>
+    </div>
+
+    <div class="content">
+      <div class="overlay">
+        <div class="content-title">무구</div>
+        <div class="description">무속인이 굿을 하거나 점을 칠 때 사용하는 여러 가지 의례도구.</div>
+        
+        <div class="image-container">
+          <img src="dotjari.png" class="content-image">
+          <img src="knife.png" class="overlay-image" id="knife" onclick="openDetail('knife')">
+          <img src="sinwi.png" class="overlay-image" id="sinwi" onclick="openDetail('sinwi')">
+          <img src="bowl.png" class="overlay-image" id="bowl" onclick="openDetail('bowl')">
+          <img src="zing.png" class="overlay-image" id="zing" onclick="openDetail('zing')">
+          <img src="mu-bell.png" class="overlay-image" id="mu-bell" onclick="openDetail('mu-bell')">
+          <img src="buk.png" class="overlay-image" id="buk" onclick="openDetail('buk')">
+          <div class="click-text"><br><br>이미지 클릭</div>
+        </div>
+
+
+        <div class="game-container">
+          <div class="game-left">
+            <div class="game-images" id="gameImages">
+             
+            </div>
+          </div>
+          <div class="feedback-overlay" id="feedbackOverlay"></div>
+          <div class="game-right">
+            <div class="game-title">무구 이름 맞히기</div>
+            <div class="game-input-container">
+              <input type="text" id="answerInput" placeholder="무구 이름을 입력하세요..." class="game-input">
+            </div>
+            <div class="game-buttons">
+              <button onclick="refreshImages()" class="game-button refresh-btn">새로고침</button>
+              <button onclick="checkAnswer()" class="game-button score-btn">채점</button>
+            </div>
+            <div class="game-result" id="gameResult"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <a href="index.html" style="display: inline-block; text-decoration: none;">
+          <img src="bell.png" alt="메인으로" style="width: 90px; height: auto;">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-modal" id="detailModal">
+    <button class="close-button" onclick="closeDetail()">×</button>
+    <div class="detail-content">
+      <div class="detail-image">
+        <img id="detailImage" src="" alt="">
+      </div>
+      <div class="detail-text">
+        <div class="detail-title" id="detailTitle"></div>
+        <div class="detail-description" id="detailDescription"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        } else {
+          entry.target.classList.remove('animate');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+      window.scrollTo(0, 0);
+      
+      const elements = document.querySelectorAll('.content-title, .description, .image-container, .long-description, .content-video, .game-container');
+      elements.forEach(element => {
+        observer.observe(element);
+      });
+
+
+      initGame();
+    });
+
+
+    const muguData = [
+      { name: '신칼(무도)', src: 'knife.png', answers: ['신칼', '무도', '신칼(무도)'] },
+      { name: '동티(신위패)', src: 'sinwi.png', answers: ['동티', '신위패', '동티(신위패)'] },
+      { name: '신사발(점사발)', src: 'bowl.png', answers: ['신사발', '점사발', '신사발(점사발)'] },
+      { name: '징(꽹과리)', src: 'zing.png', answers: ['징', '꽹과리', '징(꽹과리)'] },
+      { name: '요령(신령)', src: 'mu-bell.png', answers: ['요령', '신령', '요령(신령)'] },
+      { name: '북', src: 'buk.png', answers: ['북', '장구'] }
+    ];
+
+    let currentGameImages = [];
+    let selectedImageIndex = -1;
+
+
+    function getInitialConsonants(text) {
+      const initials = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+      let result = '';
+      
+      for (let char of text) {
+        if (char >= '가' && char <= '힣') {
+          const code = char.charCodeAt(0) - 0xAC00;
+          const initialIndex = Math.floor(code / (21 * 28));
+          result += initials[initialIndex];
+        } else if (char === '(' || char === ')') {
+          result += char;
+        } else if (char !== ' ') {
+          result += char;
+        }
+      }
+      
+      return result;
+    }
+
+    function initGame() {
+      refreshImages();
+    }
+
+    function refreshImages() {
+      const gameImagesContainer = document.getElementById('gameImages');
+
+      const existingImg = gameImagesContainer.querySelector('.game-image');
+      if (existingImg) {
+        existingImg.remove();
+      }
+      
+
+      currentGameImages = [];
+      const randomIndex = Math.floor(Math.random() * muguData.length);
+      const muguItem = muguData[randomIndex];
+      currentGameImages.push(muguItem);
+      
+      const img = document.createElement('img');
+      img.src = muguItem.src;
+      img.alt = muguItem.name;
+      img.className = 'game-image';
+      gameImagesContainer.appendChild(img);
+      
+
+      selectedImageIndex = 0;
+      
+
+      document.getElementById('gameResult').innerHTML = '';
+      document.getElementById('answerInput').value = '';
+      const feedbackOverlay = document.getElementById('feedbackOverlay');
+      feedbackOverlay.style.opacity = '0';
+      
+
+      const gameLeft = document.querySelector('.game-left');
+      gameLeft.classList.remove('dimmed');
+    }
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById('answerInput').value.trim();
+      if (!userAnswer) {
+        document.getElementById('gameResult').innerHTML = '답을 입력해주세요!';
+        document.getElementById('gameResult').style.color = '#ff4757';
+        return;
+      }
+      
+      const selectedMugu = currentGameImages[0];
+
+      const normalizedUserAnswer = userAnswer.replace(/\s/g, '').toLowerCase();
+      const isCorrect = selectedMugu.answers.some(answer => 
+        answer.replace(/\s/g, '').toLowerCase() === normalizedUserAnswer
+      );
+      
+      const resultElement = document.getElementById('gameResult');
+      const feedbackOverlay = document.getElementById('feedbackOverlay');
+      const gameLeft = document.querySelector('.game-left');
+      
+      if (isCorrect) {
+        resultElement.innerHTML = `정답입니다! "${selectedMugu.name}"`;
+        resultElement.style.color = '#2ed573';
+
+        feedbackOverlay.innerHTML = '○';
+        feedbackOverlay.className = 'feedback-overlay feedback-correct';
+        feedbackOverlay.style.opacity = '1';
+
+        gameLeft.classList.add('dimmed');
+      } else {
+        const initialHint = getInitialConsonants(selectedMugu.name);
+        resultElement.innerHTML = `틀렸습니다.<br>힌트: ${initialHint}`;
+        resultElement.style.color = '#ff4757';
+
+        feedbackOverlay.innerHTML = '✕';
+        feedbackOverlay.className = 'feedback-overlay feedback-incorrect';
+        feedbackOverlay.style.opacity = '1';
+
+        gameLeft.classList.add('dimmed');
+      }
+      
+
+      setTimeout(() => {
+        feedbackOverlay.style.opacity = '0';
+        gameLeft.classList.remove('dimmed');
+      }, 3000);
+    }
+
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && document.activeElement.id === 'answerInput') {
+        checkAnswer();
+      }
+    });
+
+    function openDetail(itemType) {
+      const modal = document.getElementById('detailModal');
+      const image = document.getElementById('detailImage');
+      const title = document.getElementById('detailTitle');
+      const description = document.getElementById('detailDescription');
+
+      if (itemType === 'knife') {
+        image.src = 'knife.png';
+        title.innerHTML = '신칼<br>(무도)';
+        description.textContent = '무당이 신내림을 받았을 때 들고 춤추는 의식용 칼이다. 악귀를 물리치고 신의 위력의 장단을 추도하며 무당의 춤과 함께 리듬을 만들어낸다.';
+      } else if (itemType === 'sinwi') {
+        image.src = 'sinwi.png';
+        title.innerHTML = '동티<br>(신위패)';
+        description.textContent = '특정 신의 이름을 적은 나무패나 종이로, 신의 자리를 표시하는 임시 위패이다. 굿이 끝나면 태우거나 물에 흘려보낸다.';
+      } else if (itemType === 'bowl') {
+        image.src = 'bowl.png';
+        title.innerHTML = '신사발<br>(점사발)';
+        description.textContent = '물을 담아 점을 치는 특별한 사발이다. 물 위에 쌀알이나 동전을 띄워 그 움직임으로 길흉을 판단하거나, 물의 색깔 변화로 신의 뜻을 읽습니다';
+      } else if (itemType === 'zing') {
+        image.src = 'zing.png';
+        title.innerHTML = '징<br>(꽹과리)';
+        description.textContent = '굿의 핵심 타악기로, 청동으로 만들어진 둥근 형태의 악기이다. 신을 부르고 악귀를 쫓는 역할을 하며, 굿의 분위기를 고조시키는 데 중요한 역할을 한다';
+      } else if (itemType === 'mu-bell') {
+        image.src = 'mu-bell.png';
+        title.innerHTML = '요령<br>(신령)';
+        description.textContent = '작은 청동 방울이 달린 손잡이가 있는 도구로, 무당이 흔들어 맑은 소리를 낸다. 신을 부르고 잡귀를 물리치는 데 사용되며, 특히 개인 굿에서 자주 보인다.';
+      } else if (itemType === 'buk') {
+        image.src = 'buk.png';
+        title.innerHTML = '북';
+        description.textContent = '이미지와 같은 북 또는 모래시계 형태의 양면 북인 장구를 이용한다. 굿의 장단을 주도하며, 무당의 춤과 함께 리듬을 만들어낸다.';
+      }
+
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetail() {
+      const modal = document.getElementById('detailModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeDetail();
+      }
+    });
+  </script>
+</body>
+</html>
